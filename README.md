@@ -53,7 +53,16 @@ tailserve start
 
 `tailserve start` prints the address of the dashboard, something like `https://my-laptop.your-tailnet.ts.net/`. Open it from any device on your tailnet :sunglasses:
 
+> [!NOTE]
 > Don't have Go? Install it with `brew install go`, or see [go.dev/dl](https://go.dev/dl/).
+
+> [!TIP]
+> `go install` puts `tailserve` in `~/go/bin`.\
+> If your shell can't find it, add this line to your shell's startup file (e.g. `~/.zshrc`) and open a new terminal:
+>
+> ```sh
+> export PATH="$PATH:$HOME/go/bin"
+> ```
 
 
 ## :sparkles: In Short
@@ -134,6 +143,7 @@ These ports are never served by a range or a process name, only by a Rule that n
 
 `22` SSH · `139` `445` SMB · `548` AFP · `2345` Delve · `3306` MySQL · `3389` Remote Desktop · `5432` PostgreSQL · `5900` VNC · `6379` Redis · `9229` Node inspector · `27017` MongoDB
 
+> [!NOTE]
 > Ports `443` and `80` on the tailnet are taken by the dashboard and its redirect.
 
 
