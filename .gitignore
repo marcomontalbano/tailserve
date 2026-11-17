@@ -1,0 +1,36 @@
+# Build output
+bin/
+dist/
+/tailserve
+*.exe
+
+# Go test and profiling output
+*.test
+*.out
+coverage.*
+*.prof
+
+# Local environment
+.env
+.env.*
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk

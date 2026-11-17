@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130" width="130" height="130" role="img" aria-label="tailserve">
+  <rect width="130" height="130" rx="28" fill="#232222"/>
+  <g fill="#a7a7a7">
+    <circle cx="28.5" cy="36" r="5.5"/>
+    <circle cx="39.5" cy="50" r="5.5"/>
+    <circle cx="50.5" cy="64" r="5.5"/>
+    <circle cx="39.5" cy="78" r="5.5"/>
+    <circle cx="28.5" cy="92" r="5.5"/>
+  </g>
+  <g fill="#F5F5F5">
+    <circle cx="59.5" cy="92" r="5.5"/>
+    <circle cx="73.5" cy="92" r="5.5"/>
+    <circle cx="87.5" cy="92" r="5.5"/>
+    <circle cx="101.5" cy="92" r="5.5"/>
+  </g>
+</svg>
