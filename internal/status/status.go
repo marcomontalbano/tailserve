@@ -36,6 +36,8 @@ type Row struct {
 type Snapshot struct {
 	Running bool
 	PID     int
+	// Version is the version of the running tailserve, such as "0.1.0"; empty when it is not running.
+	Version string
 	// Hostname is the machine's name on the tailnet; empty when Tailscale is not connected.
 	Hostname string
 	// DashboardURL is empty when the Dashboard is not served; DashboardError then says why, if known.

@@ -84,6 +84,7 @@ tailserve status    # what's allowed or served, and why
 tailserve allow     # pick running Services to serve, or add a Rule directly
 tailserve deny      # pick Rules to remove
 tailserve config    # open the config file in $EDITOR
+tailserve version   # the version of tailserve; add --daemon for the running one too
 ```
 
 ### Allow and deny
