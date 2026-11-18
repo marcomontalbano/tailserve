@@ -15,6 +15,9 @@
 </p>
 
 <p align="center">
+    <a href="https://github.com/marcomontalbano/tailserve/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/marcomontalbano/tailserve/ci.yml?branch=main&style=for-the-badge&label=ci" /></a>
+    <a href="https://github.com/marcomontalbano/tailserve/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/marcomontalbano/tailserve?style=for-the-badge" /></a>
+    &nbsp;&nbsp;&nbsp;
     <a href="https://github.com/sponsors/marcomontalbano"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors&style=for-the-badge" /></a>
 </p>
 
@@ -42,7 +45,7 @@ You need macOS and [Tailscale](https://tailscale.com/download) logged in to a ta
 
 ```sh
 # install
-go install github.com/marcomontalbano/tailserve@latest
+brew install marcomontalbano/tap/tailserve
 
 # start a dev server as usual, then pick what to serve
 tailserve allow
@@ -54,15 +57,7 @@ tailserve start
 `tailserve start` prints the address of the dashboard, something like `https://my-laptop.your-tailnet.ts.net/`. Open it from any device on your tailnet :sunglasses:
 
 > [!NOTE]
-> Don't have Go? Install it with `brew install go`, or see [go.dev/dl](https://go.dev/dl/).
-
-> [!TIP]
-> `go install` puts `tailserve` in `~/go/bin`.\
-> If your shell can't find it, add this line to your shell's startup file (e.g. `~/.zshrc`) and open a new terminal:
->
-> ```sh
-> export PATH="$PATH:$HOME/go/bin"
-> ```
+> Not using Homebrew? Download the archive for your Mac from the [latest release](https://github.com/marcomontalbano/tailserve/releases/latest), or build it with `go install github.com/marcomontalbano/tailserve@latest`.
 
 
 ## :sparkles: In Short
