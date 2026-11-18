@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/marcomontalbano/tailserve/internal/allowlist"
+	"github.com/marcomontalbano/tailserve/internal/buildinfo"
 	"github.com/marcomontalbano/tailserve/internal/config"
 	"github.com/marcomontalbano/tailserve/internal/control"
 	"github.com/marcomontalbano/tailserve/internal/daemon"
@@ -41,8 +42,14 @@ Usage:
       --note          A reminder of what the Rule is for
   tailserve deny      Pick Rules to remove, or remove the Rule given by --port and --process
   tailserve config    Open the config file in $EDITOR
+  tailserve version   Show the version of tailserve
+      --daemon        Also show the version of the running tailserve
   tailserve help      Show this help
 `
+
+// version and commit are set by release builds with
+// -ldflags "-X main.version=0.1.0 -X main.commit=<sha>"; empty, they fall back to what Go recorded.
+var version, commit string
 
 func main() {
 	if len(os.Args) < 2 {
@@ -76,6 +83,11 @@ func main() {
 		err = deny(*port, *process)
 	case "config":
 		err = editConfig()
+	case "version", "--version":
+		flags := flag.NewFlagSet("version", flag.ExitOnError)
+		includesDaemon := flags.Bool("daemon", false, "also show the version of the running tailserve")
+		_ = flags.Parse(os.Args[2:])
+		err = printVersion(*includesDaemon)
 	case "help", "-h", "--help":
 		fmt.Print(usage)
 	default:
@@ -101,11 +113,32 @@ func start() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	err = daemon.Run(ctx, configPath, log.New(os.Stdout, "", log.Ltime))
+	err = daemon.Run(ctx, configPath, buildinfo.Current(version, commit).Version, log.New(os.Stdout, "", log.Ltime))
 	if errors.Is(err, control.ErrAlreadyRunning) {
 		return errors.New("tailserve is already running: run `tailserve status` to see what it serves")
 	}
 	return err
+}
+
+// printVersion prints the version of this binary and, when includesDaemon, of the running tailserve.
+func printVersion(includesDaemon bool) error {
+	fmt.Print(buildinfo.Current(version, commit))
+	if !includesDaemon {
+		return nil
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	snapshot, err := control.FetchSnapshot(ctx)
+	switch {
+	case errors.Is(err, control.ErrNotRunning):
+		fmt.Println("Daemon: not running")
+	case err != nil:
+		return err
+	default:
+		// A tailserve older than this field answers without a version.
+		fmt.Println("Daemon: " + cmp.Or(snapshot.Version, "unknown"))
+	}
+	return nil
 }
 
 // stop asks the running tailserve to stop and waits until it has.

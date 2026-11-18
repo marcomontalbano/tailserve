@@ -29,8 +29,9 @@ import (
 const PollInterval = 2 * time.Second
 
 // Run serves the allowed Services until ctx is done or `tailserve stop` asks it to stop.
+// version is reported to `tailserve version --daemon`.
 // It returns control.ErrAlreadyRunning when another tailserve owns the control socket.
-func Run(ctx context.Context, configPath string, logger *log.Logger) error {
+func Run(ctx context.Context, configPath, version string, logger *log.Logger) error {
 	controlListener, err := control.Listen()
 	if err != nil {
 		return err
@@ -72,6 +73,7 @@ func Run(ctx context.Context, configPath string, logger *log.Logger) error {
 
 	d := &daemon{
 		configPath:          configPath,
+		version:             version,
 		allowlist:           allowlist.New(nil, nil),
 		scanner:             &discovery.LsofScanner{},
 		tailscale:           &local.Client{},
@@ -124,6 +126,7 @@ func Run(ctx context.Context, configPath string, logger *log.Logger) error {
 
 type daemon struct {
 	configPath string
+	version    string
 	// allowlist is the last valid config; an invalid file leaves it unchanged.
 	allowlist       allowlist.Allowlist
 	configModTime   time.Time
@@ -165,6 +168,7 @@ func (d *daemon) poll(ctx context.Context) {
 	snapshot := status.Snapshot{
 		Running:     true,
 		PID:         os.Getpid(),
+		Version:     d.version,
 		ConfigPath:  d.configPath,
 		RuleCount:   len(d.allowlist.Rules),
 		ConfigError: d.configError,
