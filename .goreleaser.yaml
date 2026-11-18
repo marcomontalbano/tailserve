@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# Builds and publishes a release when a `v*` tag is pushed: see .github/workflows/release.yml.
+# Try it locally, without publishing anything: goreleaser release --snapshot --clean
+version: 2
+
+project_name: tailserve
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    # tailserve finds dev servers with macOS tools; other systems come once discovery is ported.
+    goos: [darwin]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    # main.version and main.commit are what `tailserve version` prints.
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .FullCommit }}
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - "^Merge pull request"
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: Documentation
+      regexp: '^.*?docs(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: Others
+      order: 999
+
+homebrew_casks:
+  - name: tailserve
+    repository:
+      owner: marcomontalbano
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: https://github.com/marcomontalbano/tailserve
+    description: Serve your dev servers on your tailnet, automatically
+    caveats: |
+      tailserve needs Tailscale running and logged in to a tailnet.
+      Pick the dev servers to serve with `tailserve allow`, then run `tailserve start`.
+    hooks:
+      post:
+        # The binaries are not notarized by Apple, so macOS would refuse to run them without this.
+        install_steps: |
+          on_macos do
+            run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/tailserve"]
+          end
