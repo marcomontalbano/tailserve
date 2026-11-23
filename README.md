@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-    Your dev servers, on your tailnet.
+    Your dev servers, on your tailnet. Check your coding agent's work from anywhere.
 </p>
 
 <p align="center">
