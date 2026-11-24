@@ -38,6 +38,9 @@ Start a dev server, and it shows up on your tailnet. Stop it, and the mapping di
 
 That's it. That's `tailserve`.
 
+> [!TIP]
+> Curious how I work from my phone, tablet and a second Mac with everything running on the Mac at home? I wrote about the whole setup, tailserve included, in [My Mac lives at home. I code from anywhere.](https://marcomontalbano.com/blog/code-from-anywhere-with-tailscale/)
+
 
 ## :rocket: Quickstart
 
